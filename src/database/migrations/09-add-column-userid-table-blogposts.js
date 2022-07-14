@@ -4,10 +4,10 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
    await queryInterface.addColumn('BlogPosts', 'userId', {
     type: Sequelize.INTEGER,
-    field: 'id',
+    field: 'userId',
     references: {
       model: 'Users',
-      key: 'id',
+      key: 'userId',
     },
    });
   },
