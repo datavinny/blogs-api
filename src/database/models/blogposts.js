@@ -8,11 +8,9 @@ const BlogPosts = (sequelize, DataTypes) => {
   });
 
   BlogPosts.associate = (models) => {
-    models.BlogPosts.belongsToMany(models.Users, {
-      as: 'users',
-      through: BlogPosts,
+    BlogPosts.belongsTo(models.User, {
+      as: 'user',
       foreignKey: 'postId',
-      otherKey: 'userId',
     });
   };
 
