@@ -5,7 +5,7 @@ const Categories = (sequelize, DataTypes) => {
     content: DataTypes.STRING,
     published: DataTypes.DATE,
     updated: DataTypes.DATE
-  });
+  }, {timestamps: false});
 
   return Categories;
 };

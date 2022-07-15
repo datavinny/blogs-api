@@ -5,7 +5,7 @@ const BlogPosts = (sequelize, DataTypes) => {
     content: DataTypes.STRING,
     published: DataTypes.DATE,
     updated: DataTypes.DATE
-  });
+  }, {timestamps: false});
 
   BlogPosts.associate = (models) => {
     BlogPosts.belongsTo(models.User, {

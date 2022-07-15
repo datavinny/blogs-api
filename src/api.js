@@ -13,7 +13,8 @@ app.use(express.json());
 
 // const Models = require('./database/models');
 const Auth = require('./controllers/middlewares/auth');
-const generateToken = require('./helpers/token');
+const Controllers = require('./controllers');
+const generateToken = require('./services/token');
 
 app.post('/login', Auth.login, (req, res) => {
   try {
@@ -22,7 +23,10 @@ app.post('/login', Auth.login, (req, res) => {
     return res.status(200).json({ token });
   } catch (e) {
     console.log(e.message);
-    res.status(500).json({ message: 'Algo deu errado' });
+    res.status(500).json({ message: 'Error Interno do Servidor' });
   }
 });
+
+app.post('/user', Auth.createUserBody, Controllers.createUser);
+
 module.exports = app;
