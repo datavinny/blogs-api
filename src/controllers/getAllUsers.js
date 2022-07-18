@@ -2,16 +2,9 @@ const { User } = require('../database/models');
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll();
+    const users = await User.findAll({ attributes: { exclude: ['password'] } });
     const arrUsers = users.map((e) => e.dataValues);
-    const arrUsersTratado = arrUsers.map(({ id, displayName, email, image }) => ({
-        id,
-        displayName,
-        email,
-        // password,
-        image,
-      }));
-    return res.status(200).json(arrUsersTratado);
+    return res.status(200).json(arrUsers);
   } catch (e) {
     console.log(e.message);
     res.status(500).json({ message: 'Error Interno do Servidor' });
