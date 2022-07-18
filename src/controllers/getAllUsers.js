@@ -11,7 +11,6 @@ const getAllUsers = async (req, res) => {
         // password,
         image,
       }));
-    console.log('users', arrUsersTratado);
     return res.status(200).json(arrUsersTratado);
   } catch (e) {
     console.log(e.message);

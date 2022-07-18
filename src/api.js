@@ -21,5 +21,6 @@ app.post('/categories', Auth.validateJWT, Controllers.createCategory);
 
 app.get('/user', Auth.validateJWT, Controllers.getAllUsers);
 app.get('/user/:id', Auth.validateJWT, Controllers.getUserById);
+app.get('/categories', Auth.validateJWT, Controllers.getCategories);
 
 module.exports = app;
