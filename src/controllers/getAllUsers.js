@@ -8,7 +8,7 @@ const getAllUsers = async (req, res) => {
         id,
         displayName,
         email,
-        // password: undefined,
+        // password,
         image,
       }));
     console.log('users', arrUsersTratado);

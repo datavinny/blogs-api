@@ -11,8 +11,7 @@ const isFieldsValuesInvalid = async (email, password) => {
     return { message: 'Some required fields are missing' };
   }
   const isUserOnDB = await User.findOne({ where: { email, password } })
-  .then((data) => data).catch((e) => console.log(e.message));
-  console.log('isUserOnDB', isUserOnDB);
+  .then((data) => data).catch((e) => console.error(e.message));
   if (!isUserOnDB) {
     return { message: 'Invalid fields' };
   }
@@ -52,7 +51,7 @@ const isPasswordTooShort = (password) => {
 
 const isEmailOnDB = async (email) => {
   const isUserOnDB = await User.findOne({ where: { email } })
-  .then((data) => data).catch((e) => console.log(e.message));
+  .then((data) => data).catch((e) => console.error(e.message));
   if (isUserOnDB === null) {
     return false;
   }
