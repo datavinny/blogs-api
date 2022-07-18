@@ -82,7 +82,7 @@ const createUserBody = async (req, res, next) => {
 const validateJWT = async (req, res, next) => {
   const token = req.headers.authorization;
   if (!token) {
-    return res.status(401).json({ error: 'Token not found' });
+    return res.status(401).json({ message: 'Token not found' });
   }
 
   try {
@@ -91,9 +91,8 @@ const validateJWT = async (req, res, next) => {
     console.log('*******************');
     console.log('decoded', decoded);
     console.log('*******************');
-    const user = await User.findOne({ where: { username: decoded.data.username } });
-    console.log('user', user);
-    console.log('*******************');
+    // const user = await User.findOne({ where: { username: decoded.data.username } });
+    // console.log('user', user);
     // if (!user) {
     //   return res.status(401).json({ message: 'Erro ao procurar usuário do token.' });
     // }

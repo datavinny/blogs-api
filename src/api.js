@@ -29,4 +29,6 @@ app.post('/login', Auth.login, (req, res) => {
 
 app.post('/user', Auth.createUserBody, Controllers.createUser);
 
+app.get('/user', Auth.validateJWT, Controllers.getAllUsers);
+
 module.exports = app;

@@ -3,7 +3,12 @@ const User = (sequelize, DataTypes) => {
     // id: { type: DataTypes.INTEGER, primaryKey: true },
     displayName: DataTypes.STRING,
     email: DataTypes.STRING,
-    password: DataTypes.STRING,
+    password: {
+      type: DataTypes.STRING,
+      // set(value) {
+      //   this.setDataValue('password', hash(value));
+      // }
+    },
     image: DataTypes.STRING,
   }, {timestamps: false});
 
