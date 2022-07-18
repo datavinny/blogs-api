@@ -17,6 +17,7 @@ const Controllers = require('./controllers');
 
 app.post('/login', Auth.login, Controllers.createLogin);
 app.post('/user', Auth.createUserBody, Controllers.createUser);
+app.post('/categories', Auth.validateJWT, Controllers.createCategory);
 
 app.get('/user', Auth.validateJWT, Controllers.getAllUsers);
 app.get('/user/:id', Auth.validateJWT, Controllers.getUserById);
