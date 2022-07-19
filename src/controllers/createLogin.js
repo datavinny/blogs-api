@@ -2,8 +2,9 @@ const generateToken = require('../services/token');
 
 const createLogin = (req, res) => {
   try {
-    const { email } = req.body;
-    const token = generateToken(email);
+    const { userId, email } = req.user;
+    console.log(req.user);
+    const token = generateToken({ userId, email });
     return res.status(200).json({ token });
   } catch (e) {
     console.log(e.message);

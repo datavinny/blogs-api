@@ -1,28 +1,66 @@
 const jwt = require('jsonwebtoken');
-const { User } = require('../../database/models');
+const { User, Category } = require('../../database/models');
 
 const isValueUndefined = (value) => {
   if (!value) return true;
   return false;
 };
 
-const isFieldsValuesInvalid = async (email, password) => {
+const loginValidations = async (email, password) => {
   if (isValueUndefined(email) || isValueUndefined(password)) {
     return { message: 'Some required fields are missing' };
   }
-  const isUserOnDB = await User.findOne({ where: { email, password } })
-  .then((data) => data).catch((e) => console.error(e.message));
-  if (!isUserOnDB) {
+  const usuario = await User.findOne({ where: { email, password } });
+  if (!usuario) {
     return { message: 'Invalid fields' };
   }
-  return {};
+  const { id: userId } = usuario.dataValues;
+  return { userId, email };
 };
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
-  const FieldsValidation = await isFieldsValuesInvalid(email, password);
-  if (FieldsValidation && FieldsValidation.message) {
-    return res.status(400).json(FieldsValidation);
+  const validations = await loginValidations(email, password);
+  if (validations && validations.message) {
+    return res.status(400).json(validations);
+  }
+  req.user = validations;
+  next();
+};
+
+const verifyCategory = async (categoryIds) => {
+  const isCategoryIdValid = await Promise.all(categoryIds.map(async (e) => {
+    const rawCategoryIds = await Category.findOne({ where: { id: e } });
+    if (rawCategoryIds) {
+      const data = rawCategoryIds.dataValues.id;
+      return data;
+    }
+    return undefined;
+  }));
+  const arrResults = isCategoryIdValid.map((e, i) => {
+    if (!e || (!e && i === isCategoryIdValid.length - 1)) {
+      return { message: '"categoryIds" not found' };
+    }
+    return { pass: 'pass' };
+  });
+  return arrResults.find((e) => e.message);
+};
+
+const postValidations = async (title, content, categoryIds) => {
+  if (isValueUndefined(title) || isValueUndefined(content) || isValueUndefined(categoryIds)) {
+    return { message: 'Some required fields are missing' };
+  }
+  if (await verifyCategory(categoryIds)) {
+    return { message: '"categoryIds" not found' };
+  }
+  return {};
+};
+
+const post = async (req, res, next) => {
+  const { title, content, categoryIds } = req.body;
+  const validations = await postValidations(title, content, categoryIds);
+  if (validations && validations.message) {
+    return res.status(400).json(validations);
   }
   next();
 };
@@ -83,31 +121,21 @@ const validateJWT = async (req, res, next) => {
   if (!token) {
     return res.status(401).json({ message: 'Token not found' });
   }
-
   try {
     const secret = process.env.JWT_SECRET;
     const decoded = jwt.verify(token, secret);
-    console.log('*******************');
-    console.log('decoded', decoded);
-    console.log('*******************');
-    // const user = await User.findOne({ where: { username: decoded.data.username } });
-    // console.log('user', user);
-    // if (!user) {
-    //   return res.status(401).json({ message: 'Erro ao procurar usuário do token.' });
-    // }
-    // O usuário existe! Colocamos ele em um campo no objeto req.
-    //    Dessa forma, o usuário estará disponível para outros middlewares que
-    //    executem em sequência 
-    // req.user = user;
+    const user = decoded.data;
+    req.user = user;
     next();
   } catch (e) {
       console.error(e);
       return res.status(401).json({ message: 'Expired or invalid token' });
-    }
+  }
 };
 
 module.exports = {
   login,
   createUserBody,
   validateJWT,
+  post,
 };
