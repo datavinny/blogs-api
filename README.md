@@ -11,11 +11,9 @@ Este projeto foi feito enquanto estudava na @betrybe.
 ## :wrench: Técnologias usadas
 
 Back-end:
-> Desenvolvido usando: NodeJS, ExpressJS, MYSQL, ES6, Sequelize
+> Desenvolvido usando: Node.js, Express.js, MySQL, ES6, Sequelize
 
 ## Habilidades
-
-Neste projeto, foi testado/treinado habilidades de:
 
 - princípios do REST
 
